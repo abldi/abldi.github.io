@@ -1,11 +1,11 @@
 body{
-  padding-top: 15vh;
+  padding-top: 20vh;
   background-color: #fff;
   font-family: sans-serif;
 }
 p{
-  width: 3.2em;
-  padding: 0.32em;
+  width: 7em;
+  padding: 1em;
   margin: 0 auto;
   border: 2px solid #333;
   color: #222;
