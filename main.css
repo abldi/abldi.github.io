@@ -1,0 +1,15 @@
+body{
+  padding-top: 15vh;
+  background-color: #fff;
+  font-family: sans-serif;
+}
+p{
+  width: 3.2em;
+  padding: 0.32em;
+  margin: 0 auto;
+  border: 2px solid #333;
+  color: #222;
+  letter-spacing: 0.08em;
+  text-align: left;
+  line-height: 1.4em;
+ }
