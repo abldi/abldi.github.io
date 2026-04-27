@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Aldiyar Abduali</title>
-<meta name="description" content="Aldiyar Abduali — Technical Project Manager and Product specialist working across physical-digital systems. Based in Almaty, relocating to Germany. Previously Fabrie, Lamborghini, Imagination, Forvia.">
+<title>Aldiyar Abduali — Product & Technical Programme Management</title>
+<meta name="description" content="Aldiyar Abduali — Senior Technical Project Manager and Product specialist with 8+ years across automotive, software, and physical-digital systems. Relocating to Germany, September 2026.">
 <meta property="og:title" content="Aldiyar Abduali">
 <meta property="og:description" content="I spend most of my time in the gap between people who have an idea and the thing that makes it real.">
 <meta property="og:type" content="website">
@@ -15,7 +15,20 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ─── COLOUR MODES ─── */
 :root {
+  --bg:        #1a1814;
+  --ink:       #c8b99a;
+  --mid:       #7a6f5e;
+  --dim:       #3a342a;
+  --rule:      #2a2520;
+  --accent:    #8ab4c4;
+  --accent-lo: rgba(138,180,196,0.06);
+  --display:   'Syne', sans-serif;
+  --mono:      'Fragment Mono', 'Courier New', monospace;
+}
+
+html.dark {
   --bg:        #0c0d10;
   --ink:       #c8c4bc;
   --mid:       #686e7a;
@@ -23,9 +36,21 @@
   --rule:      #181b22;
   --accent:    #7ab0c4;
   --accent-lo: rgba(122,176,196,0.05);
-  --display:   'Syne', sans-serif;
-  --mono:      'Fragment Mono', 'Courier New', monospace;
 }
+
+html.light {
+  --bg:        #f4f2ed;
+  --ink:       #17130c;
+  --mid:       #5a5750;
+  --dim:       #b0aa9e;
+  --rule:      #ddd9d0;
+  --accent:    #3a7f96;
+  --accent-lo: rgba(58,127,150,0.06);
+}
+
+/* ─── TONE VISIBILITY ─── */
+html.casual [data-pro]    { display: none !important; }
+html:not(.casual) [data-cas] { display: none !important; }
 
 html { scroll-behavior: smooth; }
 
@@ -38,6 +63,7 @@ body {
   line-height: 1.72;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  transition: background 0.4s ease, color 0.4s ease;
 }
 
 body::after {
@@ -52,6 +78,60 @@ body::after {
   z-index: 999;
 }
 
+html.light body::after {
+  background-image: repeating-linear-gradient(
+    0deg, transparent 0px, transparent 3px,
+    rgba(0,0,0,0.025) 3px, rgba(0,0,0,0.025) 4px
+  );
+}
+
+/* ─── CONTROLS ─── */
+.controls {
+  position: fixed;
+  top: 24px;
+  right: 32px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.ctrl-group {
+  display: flex;
+  gap: 0;
+}
+
+.ctrl-btn {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--mid);
+  background: var(--bg);
+  border: 1px solid var(--dim);
+  padding: 5px 11px;
+  cursor: pointer;
+  margin-right: -1px;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  white-space: nowrap;
+}
+
+.ctrl-btn:hover {
+  color: var(--ink);
+  border-color: var(--mid);
+  position: relative; z-index: 1;
+}
+
+.ctrl-btn.active {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-lo);
+  position: relative; z-index: 1;
+  cursor: default;
+}
+
+/* ─── LAYOUT ─── */
 .page {
   max-width: 820px;
   margin: 0 auto;
@@ -59,10 +139,26 @@ body::after {
 }
 
 /* ─── HEADER ─── */
+#header-canvas {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 100vw;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.45;
+}
+
 header {
   padding: 96px 0 80px;
   border-bottom: 1px solid var(--rule);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.4s;
 }
+
+header > *:not(#header-canvas) { position: relative; z-index: 1; }
 
 .location-stamp {
   font-size: 11px;
@@ -70,6 +166,7 @@ header {
   color: var(--dim);
   text-transform: uppercase;
   margin-bottom: 48px;
+  transition: color 0.4s;
 }
 
 .name {
@@ -81,7 +178,7 @@ header {
   margin-bottom: 44px;
 }
 
-.name span { display: block; }
+.name span { display: block; transition: color 0.4s; }
 .name .ln2 { color: var(--accent); }
 
 .thesis {
@@ -89,10 +186,11 @@ header {
   font-style: italic;
   color: var(--mid);
   line-height: 1.7;
-  max-width: 540px;
+  max-width: 580px;
   margin-bottom: 40px;
   padding-left: 18px;
   border-left: 1px solid var(--accent);
+  transition: color 0.4s, border-color 0.4s;
 }
 
 .contact {
@@ -108,22 +206,70 @@ header {
   padding: 8px 18px;
   border: 1px solid var(--dim);
   margin-right: -1px;
+  margin-bottom: -1px;
   text-decoration: none;
   display: block;
-  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
 }
 
 .contact a:hover {
   color: var(--accent);
-  border-color: rgba(122,176,196,0.4);
+  border-color: var(--accent);
   background: var(--accent-lo);
   position: relative; z-index: 1;
+}
+
+/* Photo placeholder */
+.photo-wrap { margin-top: 40px; }
+
+.photo-placeholder {
+  width: 120px;
+  height: 148px;
+  border: 1px solid var(--dim);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  position: relative;
+  transition: border-color 0.4s;
+}
+
+.photo-placeholder::before,
+.photo-placeholder::after {
+  content: '';
+  position: absolute;
+  width: 10px; height: 10px;
+  border-color: var(--accent);
+  border-style: solid;
+  opacity: 0.4;
+}
+
+.photo-placeholder::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+.photo-placeholder::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+.photo-label {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+.photo-sub { font-size: 10px; color: var(--dim); opacity: 0.5; font-style: italic; }
+
+.photo {
+  width: 120px; height: 148px;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+  filter: grayscale(20%);
 }
 
 /* ─── BLOCKS ─── */
 .block {
   padding: 64px 0;
   border-bottom: 1px solid var(--rule);
+  transition: border-color 0.4s;
 }
 
 .block:last-of-type { border-bottom: none; }
@@ -137,11 +283,13 @@ header {
   display: flex;
   align-items: center;
   gap: 14px;
+  transition: color 0.4s;
 }
 
 .block-label::after {
   content: ''; flex: 1;
   height: 1px; background: var(--rule);
+  transition: background 0.4s;
 }
 
 /* ─── ENTRIES ─── */
@@ -152,7 +300,7 @@ header {
   margin: 0 -14px;
   border-bottom: 1px solid var(--rule);
   position: relative;
-  transition: background 0.12s;
+  transition: background 0.12s, border-color 0.4s;
 }
 
 .entry::before {
@@ -181,6 +329,7 @@ header {
   font-size: 15px;
   color: var(--ink);
   letter-spacing: -0.01em;
+  transition: color 0.4s;
 }
 
 .entry-org em {
@@ -194,6 +343,7 @@ header {
   color: var(--accent);
   letter-spacing: 0.06em;
   flex-shrink: 0;
+  transition: color 0.4s;
 }
 
 .entry-sub {
@@ -202,6 +352,7 @@ header {
   text-transform: uppercase;
   color: var(--mid);
   margin-bottom: 14px;
+  transition: color 0.4s;
 }
 
 .entry-sub .sep { color: var(--dim); margin: 0 8px; }
@@ -210,14 +361,11 @@ header {
   font-size: 13px;
   line-height: 1.82;
   color: var(--mid);
+  transition: color 0.4s;
 }
 
-.entry-body strong {
-  color: var(--ink);
-  font-weight: 400;
-}
+.entry-body strong { color: var(--ink); font-weight: 400; }
 
-/* Honest note — replaces braggy "signal" */
 .note {
   margin-top: 14px;
   padding-left: 16px;
@@ -226,25 +374,7 @@ header {
   font-style: italic;
   color: var(--mid);
   line-height: 1.65;
-}
-
-/* ─── HOW I WORK ─── */
-.prose {
-  max-width: 660px;
-}
-
-.prose p {
-  font-size: 14px;
-  line-height: 1.88;
-  color: var(--mid);
-  margin-bottom: 26px;
-}
-
-.prose p:last-child { margin-bottom: 0; }
-
-.prose p strong {
-  color: var(--ink);
-  font-weight: 400;
+  transition: color 0.4s, border-color 0.4s;
 }
 
 /* ─── SLIM ─── */
@@ -259,16 +389,22 @@ header {
   flex-wrap: wrap;
 }
 
-.slim-org {
+.slim-org { font-size: 14px; color: var(--ink); transition: color 0.4s; }
+.slim-body { font-size: 13px; line-height: 1.8; color: var(--mid); transition: color 0.4s; }
+
+/* ─── PROSE ─── */
+.prose { max-width: 660px; }
+
+.prose p {
   font-size: 14px;
-  color: var(--ink);
+  line-height: 1.88;
+  color: var(--mid);
+  margin-bottom: 26px;
+  transition: color 0.4s;
 }
 
-.slim-body {
-  font-size: 13px;
-  line-height: 1.8;
-  color: var(--mid);
-}
+.prose p:last-child { margin-bottom: 0; }
+.prose p strong { color: var(--ink); font-weight: 400; }
 
 /* ─── CAPABILITIES ─── */
 .cap-grid {
@@ -284,42 +420,28 @@ header {
   color: var(--accent);
   margin-bottom: 10px;
   display: block;
+  transition: color 0.4s;
 }
 
-.cap-items {
-  font-size: 12px;
-  line-height: 2;
-  color: var(--mid);
-}
+.cap-items { font-size: 12px; line-height: 2; color: var(--mid); transition: color 0.4s; }
 
 /* ─── LANGUAGES ─── */
 .lang-row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   border: 1px solid var(--rule);
+  transition: border-color 0.4s;
 }
 
 .lang-item {
-  padding: 22px 22px;
+  padding: 22px 18px;
   border-right: 1px solid var(--rule);
+  transition: border-color 0.4s;
 }
 
 .lang-item:last-child { border-right: none; }
-
-.lang-name {
-  font-size: 18px;
-  color: var(--ink);
-  display: block;
-  margin-bottom: 4px;
-  letter-spacing: -0.02em;
-}
-
-.lang-level {
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
+.lang-name { font-size: 18px; color: var(--ink); display: block; margin-bottom: 4px; letter-spacing: -0.02em; transition: color 0.4s; }
+.lang-level { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--dim); transition: color 0.4s; }
 
 /* ─── FOOTER ─── */
 footer {
@@ -331,78 +453,8 @@ footer {
   gap: 12px;
 }
 
-.footer-sig {
-  font-family: var(--display);
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--dim);
-  letter-spacing: -0.01em;
-}
-
-.footer-email {
-  font-size: 11px;
-  color: var(--dim);
-  letter-spacing: 0.08em;
-}
-
-/* ─── PHOTO ─── */
-.photo-wrap { margin-top: 40px; }
-
-.photo-placeholder {
-  width: 120px;
-  height: 148px;
-  border: 1px solid var(--dim);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  position: relative;
-}
-
-.photo-placeholder::before,
-.photo-placeholder::after {
-  content: '';
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-color: var(--accent);
-  border-style: solid;
-  opacity: 0.4;
-}
-
-.photo-placeholder::before {
-  top: -1px; left: -1px;
-  border-width: 1px 0 0 1px;
-}
-
-.photo-placeholder::after {
-  bottom: -1px; right: -1px;
-  border-width: 0 1px 1px 0;
-}
-
-.photo-label {
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--dim);
-}
-
-.photo-sub {
-  font-size: 10px;
-  color: var(--dim);
-  opacity: 0.5;
-  font-style: italic;
-}
-
-.photo {
-  width: 120px;
-  height: 148px;
-  object-fit: cover;
-  object-position: center top;
-  display: block;
-  filter: grayscale(20%);
-}
+.footer-sig { font-family: var(--display); font-size: 14px; font-weight: 700; color: var(--dim); }
+.footer-email { font-size: 11px; color: var(--dim); letter-spacing: 0.08em; }
 
 /* ─── REVEAL ─── */
 .reveal { opacity: 0; transition: opacity 0.7s ease; }
@@ -410,86 +462,83 @@ footer {
 .entry, .slim-entry { opacity: 0; transition: background 0.12s, opacity 0.45s ease; }
 .entry.in, .slim-entry.in { opacity: 1; }
 
-/* ─── THREE.JS CANVAS ─── */
-#header-canvas {
-  position: absolute;
-  top: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 100vw;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.5;
-}
-
-header {
-  padding: 96px 0 80px;
-  border-bottom: 1px solid var(--rule);
-  position: relative;
-  overflow: hidden;
-}
-
-header > *:not(#header-canvas) { position: relative; z-index: 1; }
-
 /* ─── RESPONSIVE ─── */
 @media (max-width: 640px) {
   .page { padding: 0 22px; }
   header { padding: 60px 0 52px; }
+  .controls { top: 14px; right: 14px; gap: 4px; }
+  .ctrl-btn { padding: 4px 7px; font-size: 9px; }
   .entry-top { flex-direction: column; gap: 4px; }
-  .entry-period { font-size: 10px; }
   .slim-top { flex-direction: column; gap: 4px; }
   .cap-grid { grid-template-columns: 1fr; }
   .lang-row { grid-template-columns: 1fr 1fr; }
-  .lang-item {
-    border-right: none;
-    border-bottom: 1px solid var(--rule);
-    padding: 16px;
-  }
+  .lang-item { border-right: none; border-bottom: 1px solid var(--rule); padding: 16px; }
   .lang-item:nth-child(odd) { border-right: 1px solid var(--rule); }
   .lang-item:last-child { border-bottom: none; }
   .contact { flex-direction: column; }
-  .contact a, .contact span { margin-right: 0; margin-bottom: -1px; }
-  footer { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .photo-placeholder { width: 96px; height: 118px; }
-  .photo { width: 96px; height: 118px; }
+  .contact a, .contact span { margin-right: 0; }
+  footer { flex-direction: column; align-items: flex-start; }
+  .photo-placeholder, .photo { width: 96px; height: 118px; }
 }
 
 </style>
 </head>
 <body>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="ctrl-group">
+    <button class="ctrl-btn" id="btn-warm">warm</button>
+    <button class="ctrl-btn" id="btn-dark">dark</button>
+    <button class="ctrl-btn" id="btn-light">light</button>
+  </div>
+  <div class="ctrl-group">
+    <button class="ctrl-btn" id="btn-pro">professional</button>
+    <button class="ctrl-btn" id="btn-cas">personal</button>
+  </div>
+</div>
+
 <div class="page">
 
+  <!-- HEADER -->
   <header class="reveal">
     <canvas id="header-canvas"></canvas>
-    <div class="location-stamp">Almaty, Kazakhstan — relocating to Germany, Sep 2026</div>
+
+    <div class="location-stamp">Almaty, Kazakhstan — relocating to Germany, September 2026</div>
 
     <div class="name">
       <span>ALDIYAR</span>
       <span class="ln2">ABDUALI</span>
     </div>
 
-    <p class="thesis">
+    <!-- Professional thesis -->
+    <p class="thesis" data-pro>
+      Senior Technical Project Manager and Product specialist with 8+ years across
+      automotive systems, software product development, and large-scale digital delivery.
+      Experienced in leading cross-functional teams, managing complex vendor relationships,
+      and delivering technical programmes in international environments.
+    </p>
+
+    <!-- Personal thesis -->
+    <p class="thesis" data-cas>
       I spend most of my time in the gap between people who have an idea
       and the thing that makes it real.
     </p>
 
     <div class="contact">
       <a href="mailto:aldiabduali@gmail.com">aldiabduali@gmail.com</a>
-      <a href="https://github.com/abldi" target="_blank">github.com/abldi</a>
       <a href="https://www.linkedin.com/in/aldi-abduali/" target="_blank">linkedin</a>
+      <a href="https://github.com/abldi" target="_blank">github.com/abldi</a>
       <span>KZ · UK · CN · DE</span>
       <span>5 languages</span>
     </div>
 
-    <!-- PHOTO PLACEHOLDER — replace src with your image path -->
     <div class="photo-wrap">
       <div class="photo-placeholder">
         <span class="photo-label">photograph</span>
         <span class="photo-sub">[ to be placed ]</span>
       </div>
-      <!-- Once you have the photo, replace the div above with:
-      <img src="photo.jpg" alt="Aldiyar Abduali" class="photo" />
-      -->
+      <!-- Replace with: <img src="photo.jpg" alt="Aldiyar Abduali" class="photo" /> -->
     </div>
   </header>
 
@@ -498,6 +547,7 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
     <div class="block-label">Work</div>
     <div class="entries">
 
+      <!-- Museum -->
       <div class="entry">
         <div class="entry-top">
           <span class="entry-org">Children's Science Museum</span>
@@ -510,18 +560,26 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="sep">/</span>
           via Kingsmen, Singapore
         </div>
-        <p class="entry-body">
+        <p class="entry-body" data-pro>
+          Responsible for UAT across <strong>130+ digital activations and 3,500+ test cases</strong>
+          for the largest children's science and technology museum under construction in Central Asia.
+          Scope includes handover documentation and training materials for the client's operational team.
+          The programme involves coordinating across multiple stakeholder organisations —
+          including the Almaty city government, main contractor, specialist vendors,
+          and future museum operators — communicating across <strong>four languages simultaneously.</strong>
+        </p>
+        <p class="entry-body" data-cas>
           Working in the digital team on the largest children's science and technology museum
           under construction in Central Asia. My scope is <strong>UAT across 130+ digital
           activations and 3,500+ test cases</strong>, plus handover documentation and training
-          materials for the museum team taking over on completion. The project itself sits inside
+          materials for the museum team taking over on completion. The project sits inside
           a complex web of stakeholders — Singapore main contractor, local construction and
           production teams, hardware vendors sourcing from China, the Almaty city government,
-          and the future operators. <strong>Four languages run across the same project
-          simultaneously.</strong>
+          and the future operators. <strong>Four languages run across the same project simultaneously.</strong>
         </p>
       </div>
 
+      <!-- Tezu Tech -->
       <div class="entry">
         <div class="entry-top">
           <span class="entry-org">Tezu Tech <em>— for Lamborghini & Spindox</em></span>
@@ -532,21 +590,32 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="sep">/</span>
           Shanghai, CN
         </div>
-        <p class="entry-body">
+        <p class="entry-body" data-pro>
+          Founded and operated a quality assurance company to validate
+          <strong>Lamborghini Urus HMI systems</strong> — safety, navigation, and infotainment —
+          for the China market, contracted through Spindox.
+          Developed the testing methodology and documentation framework from scratch,
+          utilising CANoe, CP-Tool, IDEX, and DLT toolchains.
+          Recruited and managed a team of four QA technicians.
+          <strong>Reduced troubleshooting time by 50% and doubled test coverage.</strong>
+          Managed all operational aspects including contracts, client invoicing, and financial administration.
+        </p>
+        <p class="entry-body" data-cas>
           Founded a small company to validate <strong>Lamborghini Urus HMI systems</strong> —
           safety, navigation, and infotainment — for the China market.
-          I came in with no automotive background. I learned the toolchain (CANoe, CP-Tool,
+          I came in with no automotive background. Learned the toolchain (CANoe, CP-Tool,
           IDEX, DLT), designed the testing methodology, wrote the documentation, then hired
           and trained four local technicians to run it.
           Troubleshooting time fell by half. Test coverage doubled.
           For long stretches I wasn't needed for the day-to-day — which was the intention.
         </p>
-        <p class="note">
+        <p class="note" data-cas>
           Operated as sole director throughout — hiring, contracts, client invoicing,
           payment management, and finance. The QA work was the visible part.
         </p>
       </div>
 
+      <!-- Imagination -->
       <div class="entry">
         <div class="entry-top">
           <span class="entry-org">Imagination</span>
@@ -558,19 +627,20 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           Shanghai, CN
         </div>
         <p class="entry-body">
-          Digital production across the Shanghai, Guangzhou, and Chengdu auto shows for
-          <strong>Genesis, Jaguar Land Rover, and Ford</strong> — each drawing 100,000+ attendees —
-          plus local Shanghai brand events for Genesis.
-          I sat between the creative, production, digital, and accounts teams:
-          20+ people, 20+ vendors, hardware shipped between London and Shanghai,
-          10 booth constructions, 30+ activations.
-          One event involved resolving an on-site crisis through a 56-hour sprint.
-          It shipped. In the final year, shifted into UAT for
-          <strong>Ford's global showroom iPad content</strong> — testing content
-          deployed across dealerships in markets worldwide.
+          Supported digital delivery across the Shanghai, Guangzhou, and Chengdu auto shows for
+          <strong>Genesis, Jaguar Land Rover, and Ford</strong>, with attendance exceeding
+          100,000 per event, plus Genesis brand activations in Shanghai.
+          Worked within a team spanning creative, production, digital, developer, and accounts
+          functions — supporting the Digital Director with vendor management, installation
+          coordination, documentation, and communications across 10 booth constructions
+          and 30+ digital activations. Coordinated hardware logistics between London and Shanghai
+          across 20+ vendors to meet hard event deadlines.
+          In the final year, led UAT for <strong>Ford's global showroom iPad content</strong>
+          deployed across dealership networks worldwide.
         </p>
       </div>
 
+      <!-- Forvia -->
       <div class="entry">
         <div class="entry-top">
           <span class="entry-org">Forvia <em>(R&D)</em></span>
@@ -581,23 +651,31 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="sep">/</span>
           Independent
         </div>
-        <p class="entry-body">
+        <p class="entry-body" data-pro>
+          Managed the prototype build for an in-car cabin AI system, a concept by
+          Siddharta Lizcano. Responsibilities included team assembly, technical briefing,
+          system architecture documentation, connectivity diagrams, hardware configuration,
+          deployment, and testing. The system integrated seat adjustment, infotainment
+          connectivity, environmental data ingestion, and persistent driver profiling via a
+          <strong>generative UI, conversational AI companion, and multi-agent multimodal
+          local AI stack</strong> deployed on a headless Arch Linux server, operational
+          from January 2024. Prototype delivered successfully within a three to five month engagement.
+        </p>
+        <p class="entry-body" data-cas>
           Built and managed the prototype for an in-car cabin AI system, a concept by
           Siddharta Lizcano. Brought the lead developer on board, wrote the briefs and
-          system diagrams, contributed to feature definition, built and configured a <strong>headless local AI server running Arch Linux</strong>, deployed the stack, and handled
-          testing throughout.
-          The system adjusted seats, connected to the infotainment layer,
-          ingested external environment data, and maintained a persistent driver profile —
-          with a <strong>generative UI, conversational companion, and multi-agent
-          multimodal local AI stack</strong> running in January 2024,
+          system diagrams, contributed to feature definition, built and configured a
+          <strong>headless local AI server running Arch Linux</strong>, deployed the stack,
+          and handled testing throughout. The system adjusted seats, connected to the
+          infotainment layer, ingested external environment data, and maintained a persistent
+          driver profile — with a <strong>generative UI, conversational companion, and
+          multi-agent multimodal local AI stack</strong> running in January 2024,
           before that combination became a common pattern.
-          An independent R&D collaboration, three to five months.
-          The prototype was delivered and demonstrated. A second research phase was planned
-          but the project stalled — internal politics on the client side blocked it
-          before it could progress further.
+          The prototype was delivered and demonstrated. The project concluded after the initial phase.
         </p>
       </div>
 
+      <!-- Fabrie -->
       <div class="entry">
         <div class="entry-top">
           <span class="entry-org">Fabrie <em>(originally Langzou)</em></span>
@@ -608,21 +686,33 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="sep">/</span>
           Shanghai, CN
         </div>
-        <p class="entry-body">
+        <p class="entry-body" data-pro>
+          Joined as a web development intern when the team comprised three people;
+          progressed through web graphics engineering to product and project management
+          over four years. Delivered eight products spanning AR/VR, Digital City Twin,
+          collaboration tools, and STEAM education.
+          Developed a <strong>Python-based 3D model processing pipeline for Shanghai's
+          digital twin</strong> — converting and optimising drone-scanned geometry at a scale
+          of 600,000+ buildings. Led product research, prototyping, and design for Fabrie —
+          <strong>an AI-powered infinite canvas and design collaboration platform</strong> —
+          from initial concept to published MVP, under the direction of the CEO.
+          Following departure in 2021, the product secured Pre-A and Pre-A+ funding
+          from Sequoia China and CDH Investments, with the team scaling to 60–70 people.
+        </p>
+        <p class="entry-body" data-cas>
           Joined as a web development intern when the team was three people.
           Stayed four years. Moved from frontend work into web graphics (Three.js, WebGL),
           then built a <strong>Python pipeline to process 600,000+ drone-scanned buildings</strong>
           for Shanghai's digital twin. Eventually shifted into product and project management
           across eight products spanning AR/VR, Digital City Twin, collaboration tools,
-          and STEAM education.
-          The last product I worked on was Fabrie itself — <strong>an AI-powered infinite
-          canvas and design collaboration platform</strong>. Under the CEO's direction,
-          I took it from early concept through research, prototyping, and design
-          to a published MVP. That product became the company.
+          and STEAM education. The last product I worked on was Fabrie itself —
+          <strong>an AI-powered infinite canvas and design collaboration platform</strong>.
+          Under the CEO's direction, I took it from early concept through research, prototyping,
+          and design to a published MVP. That product became the company.
           After I left in 2021, it raised a Pre-A and Pre-A+ with Sequoia China
           and CDH Investments, and the team grew to 60–70 people.
         </p>
-        <p class="note">
+        <p class="note" data-cas>
           I worked on many things there. Fabrie is the one that went somewhere.
         </p>
       </div>
@@ -630,38 +720,60 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
     </div>
   </div>
 
-  <!-- HOW I WORK -->
+  <!-- PROFILE / HOW I WORK -->
   <div class="block reveal">
-    <div class="block-label">How I work</div>
-    <div class="prose">
+
+    <div class="block-label" data-pro>Profile</div>
+    <div class="prose" data-pro>
       <p>
-        I'm a generalist. That means I've rarely been the most expert person in
-        the room — in automotive, in graphics engineering, in museum construction,
-        or in most other things I've worked on.
-        What I can do is walk into a room where the problem isn't clear yet,
-        figure out what's actually happening, and build something that helps.
+        Multidisciplinary professional with a background spanning software engineering,
+        product management, and technical programme delivery across automotive, computer vision,
+        brand experience, and cultural infrastructure sectors.
+        Experienced in entering complex, cross-functional environments and establishing
+        structured processes where none previously existed.
+      </p>
+      <p>
+        Consistently effective in roles requiring both technical depth and stakeholder
+        management — translating between engineering teams, creative disciplines,
+        client organisations, and executive leadership.
+        Comfortable operating across cultural and linguistic boundaries,
+        having worked in international teams across Kazakhstan, the United Kingdom,
+        and China over more than a decade.
+      </p>
+      <p>
+        Particular focus on process design, documentation, and systems that scale
+        independently — reducing operational dependency on individuals while
+        improving consistency and coverage.
+      </p>
+    </div>
+
+    <div class="block-label" data-cas>How I work</div>
+    <div class="prose" data-cas>
+      <p>
+        I'm a generalist. That means I've rarely been the most expert person in the room —
+        in automotive, in graphics engineering, in museum construction, or in most other
+        things I've worked on. What I can do is walk into a room where the problem isn't
+        clear yet, figure out what's actually happening, and build something that helps.
       </p>
       <p>
         The pattern I've noticed is that I'm more useful at the start of things —
-        when the process doesn't exist and someone has to invent it —
-        than I am once everything is running smoothly.
-        I lose interest when a system is settled and just needs maintenance.
-        This isn't a virtue, it's just how I'm wired, and it's useful to know.
+        when the process doesn't exist and someone has to invent it. But I'm also drawn
+        to existing systems that are broken or inefficient. The instinct is the same:
+        question whether the current approach makes sense before accepting it.
       </p>
       <p>
         <strong>I care about processes more than outputs.</strong>
-        An output is a moment. A process compounds.
-        The Lamborghini QA workflow, the 3D pipeline, the documentation systems —
-        the thing I was most interested in was whether they'd hold up once I left.
-        Sometimes they did. Sometimes they didn't.
+        An output is a moment. A process compounds. The Lamborghini QA workflow,
+        the 3D pipeline, the documentation systems — what I was most interested in
+        was whether they'd hold up once I left.
       </p>
       <p>
-        I've lived in Kazakhstan, the UK, and China. I hold a passport, speak four languages,
-        and have spent most of my adult life being the person in the room who came from somewhere else.
-        That position — slightly outside, trying to understand — is where I'm most comfortable.
-        It's probably why I keep taking roles in domains I've never worked in before.
+        I've lived in Kazakhstan, the UK, and China. I've spent most of my adult life
+        being the person in the room who came from somewhere else. That position —
+        slightly outside, trying to understand — is where I work best.
       </p>
     </div>
+
   </div>
 
   <!-- EARLIER -->
@@ -674,15 +786,20 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="slim-org">UNFPA Y-PEER Network</span>
           <span class="entry-period">2008 – 2011 / Shymkent, KZ</span>
         </div>
-        <p class="slim-body">
+        <p class="slim-body" data-pro>
+          Peer educator delivering sexual health and reproductive rights programmes
+          across rural communities in southern Kazakhstan. Trained approximately
+          3,000 participants over three years. Developed foundational skills in
+          public communication, group facilitation, and structured programme delivery.
+        </p>
+        <p class="slim-body" data-cas>
           Peer educator working on sexual health and reproductive rights across rural
-          southern Kazakhstan — conservative communities, topics that weren't discussed
-          openly. The room would laugh when I introduced the subject.
-          By the end of the session they were serious, present, and somehow more bonded
-          as a group than when we started. I trained roughly 3,000 teenagers over three years.
-          I was a teenager myself for most of it. What I learned wasn't confidence exactly —
-          it was how to enter a mode where the discomfort stops mattering
-          and the work takes over.
+          southern Kazakhstan — conservative communities, topics that weren't discussed openly.
+          The room would laugh when I introduced the subject. By the end of the session
+          they were serious, present, and somehow more bonded as a group than when we started.
+          I trained roughly 3,000 teenagers over three years. I was a teenager myself for most of it.
+          What I learned wasn't confidence exactly — it was how to enter a mode where
+          the discomfort stops mattering and the work takes over.
         </p>
       </div>
 
@@ -691,7 +808,12 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="slim-org">British Council Global Changemakers</span>
           <span class="entry-period">2010 – 2011 / London, UK</span>
         </div>
-        <p class="slim-body">
+        <p class="slim-body" data-pro>
+          Selected as one of 60 delegates worldwide for a year-long British Council
+          leadership programme. Attended the international summit in London;
+          participated in cross-cultural collaborative project work over the following year.
+        </p>
+        <p class="slim-body" data-cas>
           One of 60 delegates selected globally for a year-long British Council programme.
           Summit in London. Collaborative projects with people from countries I'd never visited.
         </p>
@@ -702,13 +824,19 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="slim-org">CoderBunker</span>
           <span class="entry-period">2016 – ongoing / Shanghai, CN</span>
         </div>
-        <p class="slim-body">
-          Joined a community of software engineers and freelancers in Shanghai around my third
-          year of university. This is where the technical direction took shape — learned
-          web graphics properly, ran workshops on A-Frame and Three.js, built things
-          alongside people who knew more than I did.
-          The community has supplied freelance work on and off ever since,
-          and was one of two introductions that led to the museum project in Almaty —
+        <p class="slim-body" data-pro>
+          Active member of a Shanghai-based software engineering and freelance community.
+          Participated in and facilitated workshops on A-Frame and Three.js.
+          A source of ongoing freelance collaboration, including an introduction
+          to the Kingsmen museum project in Almaty.
+        </p>
+        <p class="slim-body" data-cas>
+          Joined a community of software engineers and freelancers in Shanghai during my
+          third year of university. This is where the technical direction took shape —
+          learned web graphics properly, ran workshops on A-Frame and Three.js,
+          built things alongside people who knew more than I did.
+          Has been a source of freelance work on and off ever since, and was one of two
+          introductions that led to the museum project in Almaty —
           the other being a colleague from Imagination who had previously worked at Kingsmen.
         </p>
       </div>
@@ -726,10 +854,15 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="slim-org">University of Shanghai for Science & Technology</span>
           <span class="entry-period">2013 – 2017 / Shanghai, CN</span>
         </div>
-        <p class="slim-body">
+        <p class="slim-body" data-pro>
           BA Business Administration — full Shanghai Government scholarship.
-          By the second year I realised I'd covered most of the coursework
-          already in the UK, so I started teaching myself to code.
+          Pursued independent study in software development alongside coursework,
+          leading to a professional transition into web engineering.
+        </p>
+        <p class="slim-body" data-cas>
+          BA Business Administration — full Shanghai Government scholarship.
+          By the second year I realised I'd covered most of the coursework already in the UK,
+          so I started teaching myself to code.
         </p>
       </div>
 
@@ -738,13 +871,17 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
           <span class="slim-org">Cambridge Arts & Science College</span>
           <span class="entry-period">2011 – 2012 / Canterbury, UK</span>
         </div>
-        <p class="slim-body">
+        <p class="slim-body" data-pro>
+          Foundation in Business Studies — full Cambridge Education Group scholarship.
+          International study environment with peers from across Asia and Europe,
+          which informed a subsequent decision to take a gap year in Shanghai.
+        </p>
+        <p class="slim-body" data-cas>
           Foundation in Business Studies — full Cambridge Education Group scholarship.
           First time outside Kazakhstan. Met people from across Asia, which is what
-          sent me to Shanghai on a gap year the following year. The UK felt regulated,
-          successful on paper but stiff for a young person trying to find traction.
-          Shanghai in 2012 was the opposite — rough, chaotic, and full of room
-          to move. I stayed two years instead of one.
+          sent me to Shanghai on a gap year. The UK felt regulated and stiff for a
+          young person trying to find traction. Shanghai in 2012 was the opposite —
+          rough, chaotic, and full of room to move. I stayed two years instead of one.
         </p>
       </div>
 
@@ -757,76 +894,35 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
     <div class="cap-grid">
       <div>
         <span class="cap-label">Design & Prototyping</span>
-        <div class="cap-items">
-          Figma · Sketch · Photoshop<br>
-          Illustrator · Miro<br>
-          Wireframing · Design thinking<br>
-          User research & interviews
-        </div>
+        <div class="cap-items">Figma · Sketch · Photoshop<br>Illustrator · Miro<br>Wireframing · Design thinking<br>User research & interviews</div>
       </div>
       <div>
         <span class="cap-label">Engineering</span>
-        <div class="cap-items">
-          JavaScript · Python · C# · WebGL<br>
-          Three.js · Unity · A-Frame<br>
-          HTML/CSS · git · bash<br>
-          npm · pip<br>
-          3D Rendering Pipeline · GIS
-        </div>
+        <div class="cap-items">JavaScript · Python · C# · WebGL<br>Three.js · Unity · A-Frame<br>HTML/CSS · git · bash<br>npm · pip · 3D Rendering Pipeline · GIS</div>
       </div>
       <div>
         <span class="cap-label">AI & Machine Learning</span>
-        <div class="cap-items">
-          Ollama · LangChain · Llama<br>
-          Local LLM deployment<br>
-          STT / TTS · Computer vision<br>
-          Prompt engineering<br>
-          Multi-agent systems
-        </div>
+        <div class="cap-items">Ollama · LangChain · Llama<br>Local LLM deployment<br>STT / TTS · Computer vision<br>Prompt engineering<br>Multi-agent systems</div>
       </div>
       <div>
         <span class="cap-label">Data & Systems</span>
-        <div class="cap-items">
-          SQL · Airtable · Excel<br>
-          Relational databases<br>
-          Google Analytics · SEO<br>
-          REST APIs
-        </div>
+        <div class="cap-items">SQL · Airtable · Excel<br>Relational databases<br>Google Analytics · SEO<br>REST APIs</div>
       </div>
       <div>
         <span class="cap-label">Automotive Toolchain</span>
-        <div class="cap-items">
-          CANoe · CP-Tool · IDEX · DLT<br>
-          CAN diagnostics
-        </div>
+        <div class="cap-items">CANoe · CP-Tool · IDEX · DLT<br>CAN diagnostics</div>
       </div>
       <div>
         <span class="cap-label">Delivery & Process</span>
-        <div class="cap-items">
-          Agile · Scrum · PRD authorship<br>
-          JIRA · Gantt · Trello · Notion<br>
-          Vendor coordination<br>
-          Hardware logistics<br>
-          UAT management
-        </div>
+        <div class="cap-items">Agile · Scrum · PRD authorship<br>JIRA · Gantt · Trello · Notion<br>Vendor coordination<br>Hardware logistics · UAT management</div>
       </div>
       <div>
         <span class="cap-label">Documentation & Diagramming</span>
-        <div class="cap-items">
-          Technical writing · Brief authorship<br>
-          Single-line diagrams<br>
-          Connectivity diagrams<br>
-          Logic · User · Data flows<br>
-          Roadmaps
-        </div>
+        <div class="cap-items">Technical writing · Brief authorship<br>Single-line diagrams<br>Connectivity diagrams<br>Logic · User · Data flows<br>Roadmaps</div>
       </div>
       <div>
         <span class="cap-label">Interests</span>
-        <div class="cap-items">
-          Creative coding · Hackerspace<br>
-          3D scanning & printing<br>
-          Open-source indie games
-        </div>
+        <div class="cap-items">Creative coding · Hackerspace<br>3D scanning & printing<br>Open-source indie games</div>
       </div>
     </div>
   </div>
@@ -835,33 +931,30 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
   <div class="block reveal">
     <div class="block-label">Languages</div>
     <div class="lang-row">
-      <div class="lang-item">
-        <span class="lang-name">Kazakh</span>
-        <span class="lang-level">Native</span>
-      </div>
-      <div class="lang-item">
-        <span class="lang-name">Russian</span>
-        <span class="lang-level">Native</span>
-      </div>
-      <div class="lang-item">
-        <span class="lang-name">English</span>
-        <span class="lang-level">Fluent — IELTS 6.5</span>
-      </div>
-      <div class="lang-item">
-        <span class="lang-name">中文</span>
-        <span class="lang-level">Proficient — HSK 5</span>
-      </div>
-      <div class="lang-item">
-        <span class="lang-name">Deutsch</span>
-        <span class="lang-level">Beginner — A2</span>
-      </div>
+      <div class="lang-item"><span class="lang-name">Kazakh</span><span class="lang-level">Native</span></div>
+      <div class="lang-item"><span class="lang-name">Russian</span><span class="lang-level">Native</span></div>
+      <div class="lang-item"><span class="lang-name">English</span><span class="lang-level">Fluent — IELTS 6.5</span></div>
+      <div class="lang-item"><span class="lang-name">中文</span><span class="lang-level">Proficient — HSK 5</span></div>
+      <div class="lang-item"><span class="lang-name">Deutsch</span><span class="lang-level">Beginner — A2</span></div>
     </div>
   </div>
 
-  <!-- NEXT -->
+  <!-- AVAILABILITY -->
   <div class="block reveal">
-    <div class="block-label">Next</div>
-    <div class="prose">
+    <div class="block-label" data-pro>Availability</div>
+    <div class="prose" data-pro>
+      <p>
+        Available for senior product management, technical programme management,
+        or related roles in Germany from September 2026.
+        Open to positions in companies working at the intersection of hardware,
+        software, and user experience — particularly in automotive technology,
+        industrial systems, spatial computing, or interactive media.
+        EU work authorisation in progress.
+      </p>
+    </div>
+
+    <div class="block-label" data-cas>Next</div>
+    <div class="prose" data-cas>
       <p>
         Looking for product or technical programme roles in Germany,
         preferably in companies building physical-digital systems —
@@ -880,110 +973,137 @@ header > *:not(#header-canvas) { position: relative; z-index: 1; }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-  // ─── SUBTLE POINT FIELD ───
-  (function() {
-    const canvas = document.getElementById('header-canvas');
-    const header = canvas.parentElement;
+// ─── THREE.JS POINT FIELD ───
+(function() {
+  const canvas = document.getElementById('header-canvas');
+  const header = canvas.parentElement;
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, 2, 0.1, 100);
+  camera.position.z = 3;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  const count = 280;
+  const positions = new Float32Array(count * 3);
+  for (let i = 0; i < count; i++) {
+    positions[i*3]   = (Math.random()-0.5)*12;
+    positions[i*3+1] = (Math.random()-0.5)*6;
+    positions[i*3+2] = (Math.random()-0.5)*4;
+  }
 
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, 2, 0.1, 100);
-    camera.position.z = 3;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
 
-    // Point cloud — sparse, slow, quiet
-    const count = 280;
-    const positions = new Float32Array(count * 3);
+  const mat = new THREE.PointsMaterial({ color: 0x8ab4c4, size: 0.018, transparent: true, opacity: 0.55, sizeAttenuation: true });
+  const points = new THREE.Points(geo, mat);
+  scene.add(points);
 
-    for (let i = 0; i < count; i++) {
-      positions[i * 3]     = (Math.random() - 0.5) * 12;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 6;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 4;
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x8ab4c4, transparent: true, opacity: 0.07 });
+  const linePositions = [];
+  const threshold = 2.2;
+  for (let i = 0; i < count; i++) {
+    for (let j = i+1; j < count; j++) {
+      const ax=positions[i*3],ay=positions[i*3+1],az=positions[i*3+2];
+      const bx=positions[j*3],by=positions[j*3+1],bz=positions[j*3+2];
+      if (Math.sqrt((ax-bx)**2+(ay-by)**2+(az-bz)**2) < threshold) linePositions.push(ax,ay,az,bx,by,bz);
     }
+  }
+  const lineGeo = new THREE.BufferGeometry();
+  lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePositions), 3));
+  const lines = new THREE.LineSegments(lineGeo, lineMat);
+  scene.add(lines);
 
-    const geo = new THREE.BufferGeometry();
-    geo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  // Update colour when mode changes
+  const colours = { warm: 0x8ab4c4, dark: 0x7ab0c4, light: 0x3a7f96 };
+  window.updateCanvasColour = (mode) => {
+    const c = colours[mode] || colours.warm;
+    mat.color.setHex(c);
+    lineMat.color.setHex(c);
+  };
 
-    const mat = new THREE.PointsMaterial({
-      color: 0x7ab0c4,
-      size: 0.018,
-      transparent: true,
-      opacity: 0.55,
-      sizeAttenuation: true,
-    });
+  function resize() {
+    const w = header.clientWidth, h = header.clientHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h;
+    camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener('resize', resize);
 
-    const points = new THREE.Points(geo, mat);
-    scene.add(points);
-
-    // Thin connecting lines — very sparse
-    const lineMat = new THREE.LineBasicMaterial({
-      color: 0x7ab0c4,
-      transparent: true,
-      opacity: 0.07,
-    });
-
-    const threshold = 2.2;
-    const linePositions = [];
-
-    for (let i = 0; i < count; i++) {
-      for (let j = i + 1; j < count; j++) {
-        const ax = positions[i * 3], ay = positions[i * 3 + 1], az = positions[i * 3 + 2];
-        const bx = positions[j * 3], by = positions[j * 3 + 1], bz = positions[j * 3 + 2];
-        const dist = Math.sqrt((ax-bx)**2 + (ay-by)**2 + (az-bz)**2);
-        if (dist < threshold) {
-          linePositions.push(ax, ay, az, bx, by, bz);
-        }
-      }
-    }
-
-    const lineGeo = new THREE.BufferGeometry();
-    lineGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(linePositions), 3));
-    const lines = new THREE.LineSegments(lineGeo, lineMat);
-    scene.add(lines);
-
-    // Resize handler
-    function resize() {
-      const w = header.clientWidth;
-      const h = header.clientHeight;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
-    }
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    // Animation — very slow drift
-    let t = 0;
-    function animate() {
-      requestAnimationFrame(animate);
-      t += 0.0004;
-      points.rotation.y = t * 0.3;
-      points.rotation.x = Math.sin(t * 0.2) * 0.08;
-      lines.rotation.y = t * 0.3;
-      lines.rotation.x = Math.sin(t * 0.2) * 0.08;
-      renderer.render(scene, camera);
-    }
-
-    animate();
+  let t = 0;
+  (function animate() {
+    requestAnimationFrame(animate);
+    t += 0.0004;
+    points.rotation.y = lines.rotation.y = t * 0.3;
+    points.rotation.x = lines.rotation.x = Math.sin(t*0.2)*0.08;
+    renderer.render(scene, camera);
   })();
-</script>
-<script>
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      e.target.classList.add('in');
-      let d = 0;
-      e.target.querySelectorAll('.entry, .slim-entry').forEach(el => {
-        setTimeout(() => el.classList.add('in'), d);
-        d += 80;
-      });
-      io.unobserve(e.target);
-    });
-  }, { threshold: 0.05 });
+})();
 
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+// ─── COLOUR MODES ───
+const html = document.documentElement;
+const modeButtons = {
+  warm:  document.getElementById('btn-warm'),
+  dark:  document.getElementById('btn-dark'),
+  light: document.getElementById('btn-light'),
+};
+
+function applyMode(mode) {
+  html.classList.remove('dark','light');
+  if (mode === 'dark')  html.classList.add('dark');
+  if (mode === 'light') html.classList.add('light');
+  Object.entries(modeButtons).forEach(([m, btn]) => {
+    btn.classList.toggle('active', m === mode);
+  });
+  localStorage.setItem('mode', mode);
+  if (window.updateCanvasColour) window.updateCanvasColour(mode);
+}
+
+const savedMode = localStorage.getItem('mode') || 'warm';
+applyMode(savedMode);
+
+Object.entries(modeButtons).forEach(([mode, btn]) => {
+  btn.addEventListener('click', () => applyMode(mode));
+});
+
+// ─── TONE TOGGLE ───
+const btnPro = document.getElementById('btn-pro');
+const btnCas = document.getElementById('btn-cas');
+
+function applyTone(tone) {
+  if (tone === 'casual') {
+    html.classList.add('casual');
+    btnCas.classList.add('active');
+    btnPro.classList.remove('active');
+  } else {
+    html.classList.remove('casual');
+    btnPro.classList.add('active');
+    btnCas.classList.remove('active');
+  }
+  localStorage.setItem('tone', tone);
+}
+
+const savedTone = localStorage.getItem('tone') || 'pro';
+applyTone(savedTone);
+
+btnPro.addEventListener('click', () => applyTone('pro'));
+btnCas.addEventListener('click', () => applyTone('casual'));
+
+// ─── SCROLL REVEAL ───
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    let d = 0;
+    e.target.querySelectorAll('.entry, .slim-entry').forEach(el => {
+      setTimeout(() => el.classList.add('in'), d);
+      d += 80;
+    });
+    io.unobserve(e.target);
+  });
+}, { threshold: 0.05 });
+
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 </script>
 </body>
 </html>
