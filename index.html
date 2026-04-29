@@ -99,7 +99,7 @@ html.light body::after {
 
 .ctrl-group {
   display: flex;
-  gap: 0;
+  gap: 16px;
 }
 
 .ctrl-btn {
@@ -107,27 +107,19 @@ html.light body::after {
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--mid);
-  background: var(--bg);
-  border: 1px solid var(--dim);
-  padding: 5px 11px;
+  color: var(--dim);
+  background: none;
+  border: none;
+  padding: 0;
   cursor: pointer;
-  margin-right: -1px;
-  transition: color 0.2s, border-color 0.2s, background 0.2s;
+  transition: color 0.2s;
   white-space: nowrap;
 }
 
-.ctrl-btn:hover {
-  color: var(--ink);
-  border-color: var(--mid);
-  position: relative; z-index: 1;
-}
+.ctrl-btn:hover { color: var(--mid); }
 
 .ctrl-btn.active {
   color: var(--accent);
-  border-color: var(--accent);
-  background: var(--accent-lo);
-  position: relative; z-index: 1;
   cursor: default;
 }
 
@@ -467,7 +459,8 @@ footer {
   .page { padding: 0 22px; }
   header { padding: 60px 0 52px; }
   .controls { top: 14px; right: 14px; gap: 4px; }
-  .ctrl-btn { padding: 4px 7px; font-size: 9px; }
+  .ctrl-btn { font-size: 9px; }
+  .ctrl-group { gap: 12px; }
   .entry-top { flex-direction: column; gap: 4px; }
   .slim-top { flex-direction: column; gap: 4px; }
   .cap-grid { grid-template-columns: 1fr; }
